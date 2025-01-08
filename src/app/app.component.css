@@ -1,0 +1,30 @@
+
+
+.container {
+    margin: 2rem; 
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    gap: 5rem; 
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 5rem; 
+}
+
+.mazeContainer {
+    display: grid;
+    width: 500px;
+    height: 500px;
+    border : 5px solid black; 
+}
+
+.cell {
+    background-color: blue;
+}
+
+#heightSlider::before{
+    content: "";
+}
