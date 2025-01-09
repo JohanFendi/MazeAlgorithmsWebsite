@@ -1,4 +1,5 @@
-import { Cell, CellType } from "./app.cell";
+import { Cell } from "./app.cell";
+import { CellType } from "./app.colorsCellTypes";
 
 
 export class Maze {
@@ -41,7 +42,7 @@ export class Maze {
         }
     }
 
-    logMaze(): void { //For debugging
+    public logMaze(): void { //For debugging
         for (let row of this.grid){
             let res : String = ""; 
             for (let cell of row){
@@ -49,13 +50,5 @@ export class Maze {
             }
         console.log(res); 
         }
-    }
-
-    getVector() : Cell[]{
-        let vector : Cell[] = [];
-        for (let row of this.grid){
-            vector = vector.concat(row); 
-        } 
-        return vector; 
-    }    
+    } 
 }

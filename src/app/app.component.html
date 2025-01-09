@@ -1,22 +1,27 @@
 <main>
-    <div class = "container">
-        <div class = "mazeContainer" 
-        [style.grid-template-columns]="'repeat(' + this.maze.width + ', 1fr)'"
-        [style.grid-template-rows]="'repeat(' + this.maze.height + ', 1fr)'">
-            <div class = "cell" *ngFor="let cell of this.maze.getVector()"
-                [style.background-color]="cell.getColor()"
-            ></div>
+    <div class = container>
+        <div class = "mazeContainer">
+            <canvas class = "mazeCanvas" #mazeCanvas>
+
+            </canvas>
         </div>
 
         <div class = "sidebar">
-            <div>
-                <h3>height Slider</h3>
-                <input class = "slider" id = "heightSlider" type="range" name="height" min = "1" max = 100> 
+            <div class = "sliderContainer">
+                <h3>Maze Height</h3>
+                <input #heightSlider type="range" min = 3 max = 53 step = 2 (input)="getMazeHeight(heightSlider)">
             </div>
-            <div>
-                <h3>width Slider</h3>
-              <input class = "slider" type="range" min = "1" max = 100>  
+            
+            <div class = "sliderContainer">
+                <h3>Maze width</h3>
+                <input #widthSlider type="range" min = 3 max = 53 step = 2 (input)="getMazeWidth(widthSlider)">
             </div>
+
+            <button class = "sidebarButton">START</button>
+            <button class = "sidebarButton">RESET</button>
+            <button class = "sidebarButton">TUTORIAL</button>
+            <button class = "sidebarButton">PAUSE</button>
+            
         </div>
     </div>
 </main>
