@@ -17,10 +17,10 @@
                 <input #widthSlider type="range" min = 3 max = 53 step = 2 (input)="getMazeWidth(widthSlider)">
             </div>
 
-            <button class = "sidebarButton">START</button>
-            <button class = "sidebarButton">RESET</button>
+            <button class = "sidebarButton" (click) = "startKruskals()">START</button>
+            <button class = "sidebarButton" (click) = "resetMaze()">RESET</button>
             <button class = "sidebarButton">TUTORIAL</button>
-            <button class = "sidebarButton">PAUSE</button>
+            <button class = "sidebarButton" (click) = "togglePause()">{{this.pauseButtonText}}</button>
             
         </div>
     </div>

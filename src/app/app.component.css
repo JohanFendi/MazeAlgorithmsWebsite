@@ -1,10 +1,10 @@
 
-
 .container {
     display: flex;   
     justify-content: space-between;
     width: 100%;
 }
+
 
 .mazeContainer {
     width : 80%; 
@@ -14,9 +14,11 @@
     align-items: center;
 }
 
+
 .mazeCanvas {
-    width: 40%;
+    width: 50%;
     aspect-ratio: 1/1;
+    border: 1rem solid black;
 }
 
 
@@ -31,10 +33,26 @@
     gap: 3rem; 
 }
 
+
 .sidebarButton {
     width: 100px;
     aspect-ratio: 3/1;
+    border-radius: 20px;
+    border : none; 
 }
+
+
+.sidebarButton:hover {
+    background-color: rgb(179, 174, 174);
+}
+
+
+.sidebarButton:active {
+    background-color: rgb(134, 234, 146);
+    transform : scale(1.1); 
+    transition: transform .75s ease; 
+}
+
 
 .sliderContainer{
     display: flex;
