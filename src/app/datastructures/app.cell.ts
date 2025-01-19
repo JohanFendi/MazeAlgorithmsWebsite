@@ -44,7 +44,7 @@ export class ColorMap {
         ColorMap.table.set(CellType.PATH, [255,255,255]); 
         ColorMap.table.set(CellType.UNDECIDED, [125,125,125]);
         ColorMap.table.set(CellType.WALL, [0,0,0]);
-        ColorMap.table.set(CellType.BEINGDECIDED, [100,100,100]);
+        ColorMap.table.set(CellType.BEINGDECIDED, [100,0,0]);
     }
 
     

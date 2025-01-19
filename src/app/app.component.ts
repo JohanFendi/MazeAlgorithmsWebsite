@@ -5,6 +5,7 @@ import { NgFor, isPlatformBrowser } from '@angular/common';
 import { Maze } from './datastructures/app.maze';
 import { drawGraphicalMaze } from './algorithms/app.drawGraphicalMaze';
 import { KruskalsObj } from './algorithms/app.kruskals';
+import { PrimsObj } from './algorithms/app.prims';
 
 
 @Component({
@@ -64,8 +65,10 @@ export class AppComponent {
 
     this.running.value = true; 
     const maze : Maze = new Maze(this.mazeWidth, this.mazeHeight); 
-    const kruskals = new KruskalsObj(500, maze, this.mazeCanvasRef, this.running, this.paused); 
-    kruskals.run(); 
+    //const kruskals = new KruskalsObj(500, maze, this.mazeCanvasRef, this.running, this.paused); 
+    //kruskals.run(); 
+    const prims = new PrimsObj(100, maze, this.mazeCanvasRef, this.running, this.paused);
+    prims.run();
   }
 
 

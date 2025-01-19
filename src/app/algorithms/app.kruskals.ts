@@ -1,72 +1,53 @@
 import { Maze } from "../datastructures/app.maze";
-import { CellType, Cell, ColorMap } from "../datastructures/app.cell";
+import { CellType, Cell } from "../datastructures/app.cell";
 import { drawGraphicalMaze } from "./app.drawGraphicalMaze";
-import { ElementRef } from '@angular/core';
-import { Canvas } from "../datastructures/app.canvas";
+import { Algorithm } from "./app.algorithm";
 
 
-export class KruskalsObj{
-    private readonly disjointedSet : DisjointedSet; 
-    private readonly canvas : Canvas; 
-
-
-    constructor(private readonly delay : number, private readonly maze : Maze, private readonly mazeCanvasRef : ElementRef<HTMLCanvasElement>, 
-        private readonly running : {value:boolean}, private readonly paused : {value : Boolean}){
-        this.disjointedSet = new DisjointedSet(this.maze); 
-        this.canvas = new Canvas(this.maze.height, this.maze.width, this.mazeCanvasRef); 
-    }
+export class KruskalsObj extends Algorithm{ 
     
-
-    public run() : void {
+    override run() : void {
+        this.maze.createEdges();
+        const disjointedSet : DisjointedSet = new DisjointedSet(this.maze); 
         const index : {value : number} = { value : 0 }; 
         drawGraphicalMaze(this.maze.height, this.maze.height, this.mazeCanvasRef);
-        let intervalId : NodeJS.Timeout = setInterval(() => this.step(index, intervalId), this.delay);
+        let intervalId : NodeJS.Timeout = setInterval(() => this.step(index, intervalId,  disjointedSet), this.delay);
     }
 
-
     //Executes one step of kruskals algorithm. Updates the index variable by using it's passed in reference
-    private step(index : {value : number}, intervalId : NodeJS.Timeout) : void {
-
-        if (this.paused.value === true){
-            return; 
-        }
+    public step(index : {value : number}, intervalId : NodeJS.Timeout, disjointedSet : DisjointedSet) : void {
 
         if (index.value >= this.maze.edges.length || this.running.value === false){
             clearInterval(intervalId); 
             this.running.value = false; 
             this.paused.value = false; 
+            return
         } 
 
-        else {
-            const edge : [Cell, Cell, Cell, number] = this.maze.edges[index.value]; 
-            const cell1 : Cell = edge[0]; 
-            const edgeCell : Cell = edge[1]; 
-            const cell2 : Cell = edge[2]
-            
-            edgeCell.updateType(CellType.BEINGDECIDED); 
-            
-            if (this.disjointedSet.union(cell1, cell2)){
-                edgeCell.updateType(CellType.PATH); 
-            }
-
-            else {
-                edgeCell.updateType(CellType.WALL); 
-            }
-
-            index.value ++; 
-
-            this.animate(edgeCell);
+        if (this.paused.value === true){
+            return; 
         }
+        
+        const edge : [Cell, Cell, Cell, number] = this.maze.edges[index.value]; 
+        const cell1 : Cell = edge[0]; 
+        const edgeCell : Cell = edge[1]; 
+        const cell2 : Cell = edge[2]
+        
+        edgeCell.updateType(CellType.BEINGDECIDED); 
+        
+        if (disjointedSet.union(cell1, cell2)){
+            edgeCell.updateType(CellType.PATH); 
+        }
+
+        else {
+            edgeCell.updateType(CellType.WALL); 
+        }
+
+        index.value ++; 
+
+        this.animate(edgeCell);
+        
     }  
-
-
-    // Only draws the edgecell being processed, thus avoiding drawing the whole maze. 
-    private animate(edgeCell : Cell) : void {
-        const canvas_yPos : number = edgeCell.yPos * this.canvas.cellSide + this.canvas.offsetY; 
-        const canvas_xPos : number = edgeCell.xPos * this.canvas.cellSide + this.canvas.offsetX; 
-        this.canvas.context.fillStyle = ColorMap.getColor(edgeCell.type); 
-        this.canvas.context.fillRect(canvas_xPos, canvas_yPos, this.canvas.cellSide, this.canvas.cellSide); 
-    } 
 }
 
 

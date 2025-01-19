@@ -7,13 +7,12 @@ export class Maze {
     private static readonly invalidDimensionsError : string = `Dimensions of mazes (y) must give positive 
                                                         integer value of x on the line: 3 + 2x = y`
     readonly grid : Cell[][]; 
-    readonly edges : [Cell, Cell, Cell, number][]; 
+    readonly edges : [Cell, Cell, Cell, number][] = []; 
     
     
     constructor( readonly width : number, readonly height : number){
         this.checkValidDimensions(); 
-        this.grid = this.createGrid(); 
-        this.edges = this.createEdges(); 
+        this.grid = this.createGrid();  
     }
 
 
@@ -52,23 +51,22 @@ export class Maze {
 
 
     //[Cell1, cell2, edgeWeight (0-1)]
-    private createEdges () : [Cell, Cell, Cell, number][]{
-        const edges : [Cell, Cell, Cell, number][] = []; 
+    public createEdges () : void {
 
         for (let yPos = 0; yPos < this.height; yPos += 2){
             for (let xPos = 0; xPos < this.width; xPos += 2){
                 if (xPos + 2 < this.width){
-                    edges.push([this.grid[yPos][xPos], this.grid[yPos][xPos+1], 
+                    this.edges.push([this.grid[yPos][xPos], this.grid[yPos][xPos+1], 
                     this.grid[yPos][xPos+2], Math.random()]);
                 }
 
                 if (yPos + 2 < this.height) {
-                    edges.push([this.grid[yPos][xPos], this.grid[yPos+1][xPos],
+                    this.edges.push([this.grid[yPos][xPos], this.grid[yPos+1][xPos],
                     this.grid[yPos+2][xPos], Math.random()]);
                 }
             }
         }
-        edges.sort((tup1, tup2) => tup1[3] - tup2[3]); //Sorting the edges based on weight, i.e.shuffling
-        return edges; 
+        this.edges.sort((tup1, tup2) => tup1[3] - tup2[3]); //Sorting the edges based on weight, i.e.shuffling
+        
     }
 }
