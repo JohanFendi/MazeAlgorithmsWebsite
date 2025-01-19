@@ -1,8 +1,8 @@
 import { ElementRef } from '@angular/core';
-import { CellType } from './app.cell';
 
 
-//Immutable dataclass for html canvas.
+//Immutable dataclass for html canvas. 
+//The canvas is used in draw graphical maze and in the animate function of the algorithm class.
 export class Canvas {
     private static readonly contextNullError : string = `Canvas-Context is Null.`
     readonly mazeCanvasElement : HTMLCanvasElement; 

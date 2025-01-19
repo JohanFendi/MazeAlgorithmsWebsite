@@ -1,67 +1,63 @@
-import { Maze } from "../datastructures/app.maze";
-import { CellType, Cell } from "../datastructures/app.cell";
+import { CellType, Cell, Edge} from "../datastructures/app.cell";
 import { drawGraphicalMaze } from "./app.drawGraphicalMaze";
 import { Algorithm } from "./app.algorithm";
 import { Heap } from "heap-js"; 
-import { start } from "repl";
 
+
+//Prims algorithm for generating a maze
 export class PrimsObj extends Algorithm {
+    private readonly frontier : Heap<Edge> = new Heap((a, b) => b[3] - a[3]);  
+    private readonly visited = this.createVisitedArray(); 
     
+
     override run():void {
-        const frontier : Heap<[Cell, Cell, Cell, number]> = new Heap((a, b) => b[3] - a[3]);  
-        const [startX, startY] : [number, number] = this.getStartCordinates();
-        const visited = this.getVisitedArray(); 
-        
-        visited[startY][startX] = true;
-        for (let edge of this.getEdges(this.maze.grid[startY][startX], visited)){
-            frontier.push(edge); //Add all edges of starting cell to frontier
+        const [startX, startY] : [number, number] = this.getStartCordinates();        
+        this.visited[startY][startX] = true;
+        for (let edge of this.getNeighbouringEdges(this.maze.grid[startY][startX], this.visited)){
+            this.frontier.push(edge); //Add all edges of starting cell to frontier
         }
 
         drawGraphicalMaze(this.maze.height, this.maze.height, this.mazeCanvasRef);
-        let intervalId : NodeJS.Timeout = setInterval(() => this.step(intervalId, frontier, visited), this.delay);
+        this.intervalId = setInterval(() => this.step(),this.delay.value);
     }
 
 
-    private step (intervalId : NodeJS.Timeout, frontier : Heap<[Cell, Cell, Cell, number]>, visited : boolean[][]): void{ 
+    protected override step () : void{ 
+        if (this.intervalId === null){
+            throw new Error(this.intervalIdError); 
+        }
 
         if (this.running.value === false){
-            clearInterval(intervalId); 
+            clearInterval(this.intervalId); 
             this.running.value = false; 
             this.paused.value = false; 
             return
         } 
 
-        if (this.paused.value === true || frontier.size() === 0){
+        if (this.paused.value === true || this.frontier.size() === 0){
             return; 
         }
 
-        const edge : [Cell, Cell, Cell, number] = frontier.pop()!; //Not null since we checked size above
-        const edgeCell : Cell = edge[1];
-        const nextCell : Cell = edge[2];
-
-        edgeCell.updateType(CellType.BEINGDECIDED);
-        this.animate(edgeCell);
-
-        setTimeout(() => {
-            if (visited[nextCell.yPos][nextCell.xPos]){
-                edgeCell.updateType(CellType.WALL);
-                
-            }
-            else  {
-                visited[nextCell.yPos][nextCell.xPos] = true;
-                edgeCell.updateType(CellType.PATH); 
-                for (let newEdge of this.getEdges(nextCell, visited)){
-                    frontier.push(newEdge); 
-                }
-            }
-    
-            this.animate(edgeCell); 
-
-        }, 100);
+        const [currentCell, edgeCell, nextCell, weight] : Edge = this.frontier.pop()!; //Not null since we checked size above
         
+        if (this.visited[nextCell.yPos][nextCell.xPos]){
+            edgeCell.updateType(CellType.WALL);
+            
+        }
+        else  {
+            this.visited[nextCell.yPos][nextCell.xPos] = true;
+            edgeCell.updateType(CellType.PATH); 
+            for (let newEdge of this.getNeighbouringEdges(nextCell, this.visited)){
+                this.frontier.push(newEdge); 
+            }
+        }
+
+        this.animateEdgeCell(edgeCell); 
+
     }
 
-    private getVisitedArray():boolean[][]{
+
+    private createVisitedArray():boolean[][]{
         const visited : boolean [][] = []; 
         for (let yPos = 0; yPos < this.maze.height; yPos ++){
             visited.push([]); 
@@ -73,8 +69,8 @@ export class PrimsObj extends Algorithm {
     }
 
 
-    private getEdges(currentCell : Cell, visited : boolean[][]) : [Cell, Cell, Cell, number][]{
-        const edges : [Cell, Cell, Cell, number][] = []; 
+    private getNeighbouringEdges(currentCell : Cell, visited : boolean[][]) : Edge[]{
+        const edges : Edge[] = []; 
         const yPos : number = currentCell.yPos; 
         const xPos : number = currentCell.xPos;
 
@@ -102,15 +98,16 @@ export class PrimsObj extends Algorithm {
         let startY : number = Math.floor(Math.random() * (this.maze.height-1));
 
         if (startX % 2 === 1){
-            startX = Math.max(0, startX - 1);
+            startX = startX - 1;
         }
 
         if (startY % 2 === 1){
-            startY = Math.max(0, startY - 1);
+            startY = startY - 1;
         }
-        console.log(this.maze.width, this.maze.height);
-        console.log(startX, startY);
+
         return [startX, startY]; 
-    
     }
+
+
+    
 }

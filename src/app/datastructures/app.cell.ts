@@ -1,4 +1,5 @@
 
+export type Edge = [Cell, Cell, Cell, number]; //Current cell, edge cell, next cell, weight (random number 0-1)
 
 
 export class Cell {

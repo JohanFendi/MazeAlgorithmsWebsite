@@ -1,6 +1,8 @@
 import { CellType, Cell } from "./app.cell";
 
 
+export type Edge = [Cell, Cell, Cell, number]; //Current cell, edge cell, next cell, weight (random number 0-1)
+
 
 //Grid, edges, width and height are to be read. 
 export class Maze {
@@ -10,7 +12,7 @@ export class Maze {
     readonly edges : [Cell, Cell, Cell, number][] = []; 
     
     
-    constructor( readonly width : number, readonly height : number){
+    constructor(readonly width : number, readonly height : number){
         this.checkValidDimensions(); 
         this.grid = this.createGrid();  
     }
@@ -47,26 +49,5 @@ export class Maze {
             }
         }
         return grid; 
-    }
-
-
-    //[Cell1, cell2, edgeWeight (0-1)]
-    public createEdges () : void {
-
-        for (let yPos = 0; yPos < this.height; yPos += 2){
-            for (let xPos = 0; xPos < this.width; xPos += 2){
-                if (xPos + 2 < this.width){
-                    this.edges.push([this.grid[yPos][xPos], this.grid[yPos][xPos+1], 
-                    this.grid[yPos][xPos+2], Math.random()]);
-                }
-
-                if (yPos + 2 < this.height) {
-                    this.edges.push([this.grid[yPos][xPos], this.grid[yPos+1][xPos],
-                    this.grid[yPos+2][xPos], Math.random()]);
-                }
-            }
-        }
-        this.edges.sort((tup1, tup2) => tup1[3] - tup2[3]); //Sorting the edges based on weight, i.e.shuffling
-        
     }
 }

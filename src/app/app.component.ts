@@ -4,8 +4,9 @@ import { NgFor, isPlatformBrowser } from '@angular/common';
 
 import { Maze } from './datastructures/app.maze';
 import { drawGraphicalMaze } from './algorithms/app.drawGraphicalMaze';
-import { KruskalsObj } from './algorithms/app.kruskals';
 import { PrimsObj } from './algorithms/app.prims';
+import { KruskalsObj } from './algorithms/app.kruskals';
+import { Algorithm } from './algorithms/app.algorithm';
 
 
 @Component({
@@ -26,26 +27,34 @@ export class AppComponent {
 
   private mazeWidth : number = 25; // Number of cells
   private mazeHeight : number = 25; //Number of cells
+  private delay : {value : number} = {value : 100} ; //Delay in ms between each step of the algorithm
   private running: { value: boolean } = { value : false };
   private paused: { value: boolean } = { value : false }; 
-  
   pauseButtonText: string = "PAUSE"; 
 
+  private algorithmObj : Algorithm | undefined;
+
   //Gets value of maze height from html slider
-  public getMazeHeight(heightSlider : HTMLInputElement) : void {
+  getMazeHeight(heightSlider : HTMLInputElement) : void {
     this.mazeHeight = Number(heightSlider.value); 
     this.drawMaze();
   }
 
 
   //Gets value of maze width from html slider
-  public getMazeWidth(widthSlider : HTMLInputElement) : void {
+  getMazeWidth(widthSlider : HTMLInputElement) : void {
     this.mazeWidth = Number(widthSlider.value); 
     this.drawMaze();
   }
 
 
-  ngOnInit():void{
+  //Gets value of delay from html slider
+  getAlgorithmDelay(delaySlider : HTMLInputElement) : void {
+    this.delay.value = Number(delaySlider.value); 
+
+    if (this.algorithmObj !== undefined){
+      this.algorithmObj.updateDelay(); 
+    }
   }
 
   
@@ -54,7 +63,7 @@ export class AppComponent {
   }
 
 
-  startKruskals() : void {
+  startAlgorithm() : void {
     if (this.running.value){
       return;
     }
@@ -65,10 +74,8 @@ export class AppComponent {
 
     this.running.value = true; 
     const maze : Maze = new Maze(this.mazeWidth, this.mazeHeight); 
-    //const kruskals = new KruskalsObj(500, maze, this.mazeCanvasRef, this.running, this.paused); 
-    //kruskals.run(); 
-    const prims = new PrimsObj(100, maze, this.mazeCanvasRef, this.running, this.paused);
-    prims.run();
+    this.algorithmObj = new KruskalsObj(this.delay, maze, this.mazeCanvasRef, this.running, this.paused);
+    this.algorithmObj.run();
   }
 
 
@@ -84,12 +91,13 @@ export class AppComponent {
   resetMaze():void{
     this.running.value = false; 
     this.paused.value = false; 
+    this.pauseButtonText = "PAUSE";
     drawGraphicalMaze(this.mazeHeight, this.mazeWidth, this.mazeCanvasRef!); 
   }
 
 
   //Makes sure device is client and canvas is defined before drawing
-  drawMaze(): void {
+  drawMaze() : void {
     if (this.mazeCanvasRef === undefined){
       throw new Error(AppComponent.canvasError); 
     }

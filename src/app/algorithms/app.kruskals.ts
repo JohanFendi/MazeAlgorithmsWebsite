@@ -1,41 +1,42 @@
-import { Maze } from "../datastructures/app.maze";
-import { CellType, Cell } from "../datastructures/app.cell";
+import { CellType, Edge } from "../datastructures/app.cell";
 import { drawGraphicalMaze } from "./app.drawGraphicalMaze";
-import { Algorithm } from "./app.algorithm";
+import { Algorithm} from "./app.algorithm";
+import { DisjointedSet } from "../datastructures/app.disjointedSet";
 
 
-export class KruskalsObj extends Algorithm{ 
+export class KruskalsObj extends Algorithm {
+    private readonly edges : Edge[] = []; 
+    private readonly disjointedSet : DisjointedSet = new DisjointedSet(this.maze);
+    private index : number = 0; 
     
+
     override run() : void {
-        this.maze.createEdges();
-        const disjointedSet : DisjointedSet = new DisjointedSet(this.maze); 
-        const index : {value : number} = { value : 0 }; 
+        this.createEdges();
         drawGraphicalMaze(this.maze.height, this.maze.height, this.mazeCanvasRef);
-        let intervalId : NodeJS.Timeout = setInterval(() => this.step(index, intervalId,  disjointedSet), this.delay);
+        this.intervalId = setInterval(() => this.step(), this.delay.value);
     }
 
-    //Executes one step of kruskals algorithm. Updates the index variable by using it's passed in reference
-    public step(index : {value : number}, intervalId : NodeJS.Timeout, disjointedSet : DisjointedSet) : void {
 
-        if (index.value >= this.maze.edges.length || this.running.value === false){
-            clearInterval(intervalId); 
-            this.running.value = false; 
-            this.paused.value = false; 
-            return
-        } 
-
+    protected override step() : void {
+        
+        if (this.intervalId === null){
+            throw new Error(this.intervalIdError); 
+        }
+        
         if (this.paused.value === true){
             return; 
         }
         
-        const edge : [Cell, Cell, Cell, number] = this.maze.edges[index.value]; 
-        const cell1 : Cell = edge[0]; 
-        const edgeCell : Cell = edge[1]; 
-        const cell2 : Cell = edge[2]
+        if (this.index >= this.edges.length || this.running.value === false){
+            clearInterval(this.intervalId); 
+            this.running.value = false; 
+            this.paused.value = false; 
+            return
+        } 
         
-        edgeCell.updateType(CellType.BEINGDECIDED); 
+        const [currentCell, edgeCell, nextCell, weight] : Edge = this.edges[this.index]; 
         
-        if (disjointedSet.union(cell1, cell2)){
+        if (this.disjointedSet.union(currentCell, nextCell)){
             edgeCell.updateType(CellType.PATH); 
         }
 
@@ -43,75 +44,28 @@ export class KruskalsObj extends Algorithm{
             edgeCell.updateType(CellType.WALL); 
         }
 
-        index.value ++; 
+        this.index++; 
 
-        this.animate(edgeCell);
-        
+        this.animateEdgeCell(edgeCell);
     }  
-}
 
 
-class DisjointedSet {
-    private readonly parent : Map<Cell, Cell> = new Map <Cell, Cell> (); 
-    private readonly rank : Map<Cell, number> = new Map <Cell, number> (); 
-    private readonly findError : string =  `DisjointedSetFindError: Parent of cell should ¨
-                                            be either self pointer or other cell, not undefined.`; 
-    private readonly unionError : string = `DisjointedSetError: Rank of cell should be number, 
-                                            not undefined `; 
-    constructor(maze : Maze){
-        for (let row of maze.grid){
-            for (let cell of row){
-                if (cell.type !== CellType.WALL){
-                    this.parent.set(cell, cell); //Self pointer indicating parent,
-                    this.rank.set(cell, 0);
+    public createEdges () : void {
+        for (let yPos = 0; yPos < this.maze.height; yPos += 2){
+            for (let xPos = 0; xPos < this.maze.width; xPos += 2){
+                if (xPos + 2 < this.maze.width){
+                    this.edges.push([this.maze.grid[yPos][xPos], this.maze.grid[yPos][xPos+1], 
+                    this.maze.grid[yPos][xPos+2], Math.random()]);
+                }
+
+                if (yPos + 2 < this.maze.height) {
+                    this.edges.push([this.maze.grid[yPos][xPos], this.maze.grid[yPos+1][xPos],
+                    this.maze.grid[yPos+2][xPos], Math.random()]);
                 }
             }
         }
-    }
-
-    public union(cell1 : Cell, cell2 : Cell) : boolean {
-        const cell1Parent : Cell = this.find(cell1); 
-        const cell2Parent : Cell = this.find(cell2); 
-
-        if (cell1Parent === cell2Parent){
-            return false; 
-        }
-
-        const rank1 : number | undefined = this.rank.get(cell1Parent); 
-        const rank2 : number | undefined = this.rank.get(cell2Parent);  
-
-        if (rank1 === undefined || rank2 === undefined){
-            throw new Error(this.unionError); 
-        }
-
-        if (rank1 > rank2){
-            this.parent.set(cell2Parent, cell1Parent); 
-        }
-        else if (rank1 < rank2){
-            this.parent.set(cell1Parent, cell2Parent); 
-        }
-        else {
-            this.parent.set(cell2Parent, cell1Parent); 
-            this.rank.set(cell1Parent, rank1 + 1); 
-        }
-
-        return true; 
-    } 
-
-
-    public find(cell : Cell) : Cell {
-        let parentCell : Cell | undefined = this.parent.get(cell); 
-        
-        if (parentCell === undefined){
-            throw new Error(this.findError); 
-        } 
-
-        if (parentCell === cell){
-            return cell; 
-        }
-
-        this.parent.set(cell, this.find(parentCell)); 
-        
-        return this.parent.get(cell)!;
+        this.edges.sort((tup1, tup2) => tup1[3] - tup2[3]); //Sorting the edges based on weight, i.e.shuffling
     }
 }
+
+
