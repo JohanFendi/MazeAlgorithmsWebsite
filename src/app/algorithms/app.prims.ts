@@ -22,9 +22,9 @@ export class PrimsObj extends Algorithm {
     }
 
 
-    protected override step () : void{ 
-        if (this.intervalId === null){
-            throw new Error(this.intervalIdError); 
+    protected override step() : void {
+        if (this.paused.value === true){
+            return
         }
 
         if (this.running.value === false){
@@ -34,12 +34,37 @@ export class PrimsObj extends Algorithm {
             return
         } 
 
+        if (this.stepCount % 3 === 0){
+            this.executeStep();
+        }
+
+        else if (this.stepCount % 3 === 1){
+            this.animateStep(this.lastEdge);
+        }
+
+        else {
+            this.clearAnimation(this.lastEdge);
+        }
+
+
+        this.stepCount++;
+
+
+    }
+
+
+    protected override executeStep () : void{ 
+        if (this.intervalId === null){
+            throw new Error(this.intervalIdError); 
+        }
+
         if (this.paused.value === true || this.frontier.size() === 0){
             return; 
         }
-
+       
         const [currentCell, edgeCell, nextCell, weight] : Edge = this.frontier.pop()!; //Not null since we checked size above
-        
+        this.lastEdge = [currentCell, edgeCell, nextCell, weight];
+
         if (this.visited[nextCell.yPos][nextCell.xPos]){
             edgeCell.updateType(CellType.WALL);
             
@@ -51,9 +76,6 @@ export class PrimsObj extends Algorithm {
                 this.frontier.push(newEdge); 
             }
         }
-
-        this.animateEdgeCell(edgeCell); 
-
     }
 
 
@@ -106,8 +128,5 @@ export class PrimsObj extends Algorithm {
         }
 
         return [startX, startY]; 
-    }
-
-
-    
+    } 
 }

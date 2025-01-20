@@ -46,7 +46,7 @@ export class KruskalsObj extends Algorithm {
 
         this.index++; 
 
-        this.animateEdgeCell(edgeCell);
+        this.animateStep([currentCell, edgeCell, nextCell, weight]);
     }  
 
 

@@ -74,7 +74,7 @@ export class AppComponent {
 
     this.running.value = true; 
     const maze : Maze = new Maze(this.mazeWidth, this.mazeHeight); 
-    this.algorithmObj = new KruskalsObj(this.delay, maze, this.mazeCanvasRef, this.running, this.paused);
+    this.algorithmObj = new PrimsObj(this.delay, maze, this.mazeCanvasRef, this.running, this.paused);
     this.algorithmObj.run();
   }
 
