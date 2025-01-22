@@ -1,64 +1,16 @@
-import { CellType, Cell, Edge} from "../datastructures/app.cell";
-import { drawGraphicalMaze } from "./app.drawGraphicalMaze";
-import { Algorithm } from "./app.algorithm";
+import { CellType, Cell, Edge} from "../datastructures/cell";
+import { Algorithm } from "./algorithm";
 import { Heap } from "heap-js"; 
 
 
 //Prims algorithm for generating a maze
-export class PrimsObj extends Algorithm {
+export class Prims extends Algorithm {
     private readonly frontier : Heap<Edge> = new Heap((a, b) => b[3] - a[3]);  
     private readonly visited = this.createVisitedArray(); 
     
 
-    override run():void {
-        const [startX, startY] : [number, number] = this.getStartCordinates();        
-        this.visited[startY][startX] = true;
-        for (let edge of this.getNeighbouringEdges(this.maze.grid[startY][startX], this.visited)){
-            this.frontier.push(edge); //Add all edges of starting cell to frontier
-        }
-
-        drawGraphicalMaze(this.maze.height, this.maze.height, this.mazeCanvasRef);
-        this.intervalId = setInterval(() => this.step(),this.delay.value);
-    }
-
-
-    protected override step() : void {
-        if (this.paused.value === true){
-            return
-        }
-
-        if (this.running.value === false){
-            clearInterval(this.intervalId); 
-            this.running.value = false; 
-            this.paused.value = false; 
-            return
-        } 
-
-        if (this.stepCount % 3 === 0){
-            this.executeStep();
-        }
-
-        else if (this.stepCount % 3 === 1){
-            this.animateStep(this.lastEdge);
-        }
-
-        else {
-            this.clearAnimation(this.lastEdge);
-        }
-
-
-        this.stepCount++;
-
-
-    }
-
-
-    protected override executeStep () : void{ 
-        if (this.intervalId === null){
-            throw new Error(this.intervalIdError); 
-        }
-
-        if (this.paused.value === true || this.frontier.size() === 0){
+    protected override executeStep() : void{ 
+        if (this.frontier.size() === 0){
             return; 
         }
        

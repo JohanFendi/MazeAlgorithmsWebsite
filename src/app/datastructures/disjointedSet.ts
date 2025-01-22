@@ -1,5 +1,5 @@
-import { Cell, CellType } from "./app.cell";
-import { Maze } from "./app.maze";
+import { Cell, CellType } from "./cell";
+import { Maze } from "./maze";
 
 
 export class DisjointedSet {

@@ -40,7 +40,7 @@ export class ColorMap {
         throw new Error(ColorMap.constructorError); 
     }
 
-
+    //Insert cell types and their corresponding colors.
     static {
         ColorMap.table.set(CellType.PATH, [255,255,255]); 
         ColorMap.table.set(CellType.UNDECIDED, [125,125,125]);
@@ -48,7 +48,7 @@ export class ColorMap {
         ColorMap.table.set(CellType.BEINGDECIDED, [100,0,0]);
     }
 
-    
+    //Returns the color of the cell type in RGB format.
     public static getColor(cellType : CellType) : string {
         const rgb : [Number, Number, Number] = ColorMap.table.get(cellType)!; 
         const rgbString = "rgb(" + rgb[0] + "," + rgb[1] + "," + rgb[2] + ")"; 

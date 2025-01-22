@@ -1,4 +1,4 @@
-import { CellType, Cell } from "./app.cell";
+import { CellType, Cell } from "./cell";
 
 
 export type Edge = [Cell, Cell, Cell, number]; //Current cell, edge cell, next cell, weight (random number 0-1)

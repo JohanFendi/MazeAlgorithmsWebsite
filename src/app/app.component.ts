@@ -2,11 +2,11 @@ import { Component, ElementRef, ViewChild, PLATFORM_ID, inject } from '@angular/
 import { RouterOutlet } from '@angular/router';
 import { NgFor, isPlatformBrowser } from '@angular/common';
 
-import { Maze } from './datastructures/app.maze';
-import { drawGraphicalMaze } from './algorithms/app.drawGraphicalMaze';
-import { PrimsObj } from './algorithms/app.prims';
-import { KruskalsObj } from './algorithms/app.kruskals';
-import { Algorithm } from './algorithms/app.algorithm';
+import { Maze } from './datastructures/maze';
+import { drawGraphicalMaze } from './algorithms/drawGraphicalMaze';
+import { Prims } from './algorithms/prims';
+import { Kruskals } from './algorithms/kruskals';
+import { Algorithm } from './algorithms/algorithm';
 
 
 @Component({
@@ -34,29 +34,6 @@ export class AppComponent {
 
   private algorithmObj : Algorithm | undefined;
 
-  //Gets value of maze height from html slider
-  getMazeHeight(heightSlider : HTMLInputElement) : void {
-    this.mazeHeight = Number(heightSlider.value); 
-    this.drawMaze();
-  }
-
-
-  //Gets value of maze width from html slider
-  getMazeWidth(widthSlider : HTMLInputElement) : void {
-    this.mazeWidth = Number(widthSlider.value); 
-    this.drawMaze();
-  }
-
-
-  //Gets value of delay from html slider
-  getAlgorithmDelay(delaySlider : HTMLInputElement) : void {
-    this.delay.value = Number(delaySlider.value); 
-
-    if (this.algorithmObj !== undefined){
-      this.algorithmObj.updateDelay(); 
-    }
-  }
-
   
   ngAfterViewInit() : void{
     this.drawMaze(); 
@@ -74,27 +51,10 @@ export class AppComponent {
 
     this.running.value = true; 
     const maze : Maze = new Maze(this.mazeWidth, this.mazeHeight); 
-    this.algorithmObj = new PrimsObj(this.delay, maze, this.mazeCanvasRef, this.running, this.paused);
+    this.algorithmObj = new Prims(this.delay, maze, this.mazeCanvasRef, this.running, this.paused);
     this.algorithmObj.run();
   }
-
-
-  //User can only pause while the algorithm is running.
-  togglePause() : void {
-    if (this.running.value === true){ 
-      this.paused.value = !this.paused.value;
-      this.pauseButtonText = this.paused.value === true ? "RESUME" : "PAUSE"; 
-    } 
-  }
-
-
-  resetMaze():void{
-    this.running.value = false; 
-    this.paused.value = false; 
-    this.pauseButtonText = "PAUSE";
-    drawGraphicalMaze(this.mazeHeight, this.mazeWidth, this.mazeCanvasRef!); 
-  }
-
+  
 
   //Makes sure device is client and canvas is defined before drawing
   drawMaze() : void {

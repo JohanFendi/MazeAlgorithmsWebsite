@@ -1,32 +1,15 @@
-import { CellType, Edge } from "../datastructures/app.cell";
-import { drawGraphicalMaze } from "./app.drawGraphicalMaze";
-import { Algorithm} from "./app.algorithm";
-import { DisjointedSet } from "../datastructures/app.disjointedSet";
+import { CellType, Edge } from "../datastructures/cell";
+import { Algorithm} from "./algorithm";
+import { DisjointedSet } from "../datastructures/disjointedSet";
 
 
-export class KruskalsObj extends Algorithm {
+export class Kruskals extends Algorithm {
     private readonly edges : Edge[] = []; 
     private readonly disjointedSet : DisjointedSet = new DisjointedSet(this.maze);
     private index : number = 0; 
-    
+  
 
-    override run() : void {
-        this.createEdges();
-        drawGraphicalMaze(this.maze.height, this.maze.height, this.mazeCanvasRef);
-        this.intervalId = setInterval(() => this.step(), this.delay.value);
-    }
-
-
-    protected override step() : void {
-        
-        if (this.intervalId === null){
-            throw new Error(this.intervalIdError); 
-        }
-        
-        if (this.paused.value === true){
-            return; 
-        }
-        
+    protected override executeStep() : void {
         if (this.index >= this.edges.length || this.running.value === false){
             clearInterval(this.intervalId); 
             this.running.value = false; 
@@ -45,8 +28,6 @@ export class KruskalsObj extends Algorithm {
         }
 
         this.index++; 
-
-        this.animateStep([currentCell, edgeCell, nextCell, weight]);
     }  
 
 
