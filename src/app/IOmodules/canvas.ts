@@ -1,13 +1,19 @@
 import { ElementRef } from '@angular/core';
 import { CellType, Cell, Edge, ColorMap} from '../datastructures/cell';
-
+import { isPlatformBrowser } from '@angular/common';
 
 
 //Immutable dataclass for html canvas. 
 //The canvas is used in draw graphical maze and in the animate function of the algorithm class.
 export class Canvas {
+
+    //Error messages, class variables; 
     private static readonly edgeError : string = "Edge is undefined";
-    private static readonly contextNullError : string = `Canvas-Context is Null.`
+    private static readonly contextNullError : string = "Canvas-Context is Null"; 
+    private static readonly mazeCanvasRefError : string = "CanvasError: mazeCanvasRef is undefined"; 
+
+
+    //instance variables
     private readonly mazeCanvasElement : HTMLCanvasElement; 
     private readonly offsetX : number;
     private readonly offsetY : number; 
@@ -17,6 +23,10 @@ export class Canvas {
 
     constructor(readonly mazeHeight : number, readonly mazeWidth : number, mazeCanvasRef : ElementRef<HTMLCanvasElement>)
     {
+        if (mazeCanvasRef === undefined){
+            throw new Error(Canvas.mazeCanvasRefError); 
+        }
+
         this.mazeCanvasElement = mazeCanvasRef.nativeElement; 
         this.cellSide = this.mazeCanvasElement.clientHeight / Math.max(mazeHeight, mazeWidth); 
         this.offsetY = Math.max((mazeWidth-mazeHeight)*this.cellSide / 2, 0); 
@@ -102,6 +112,9 @@ export class Canvas {
         }    
     }
     
-   
 
+    //Makes sure device is client
+    drawMaze() : void {
+        requestAnimationFrame(() => this.drawGraphicalMaze()); 
+    }
 }

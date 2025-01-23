@@ -23,19 +23,30 @@ export class Algorithm {
                 ){
         this.canvas = new Canvas(this.maze.height, this.maze.width, this.mazeCanvasRef); 
     }
-
-
-    //To be used in run method of subclass to update the delay of the algorithm
     
-
 
     //To be overridden
     run() : void {
         throw new Error(this.notImplementedError); 
     }
 
+
+    //To be overridden
+    protected algorithmComplete() : boolean {
+        throw new Error(this.notImplementedError); 
+    }
+
+
     //To be overridden
     protected executeStep() : void {
         throw new Error(this.notImplementedError);
     }
+
+
+    //To be overridden
+    protected prepareAlgorithm(): void {
+        throw new Error(this.notImplementedError); 
+    }
+
+
 }

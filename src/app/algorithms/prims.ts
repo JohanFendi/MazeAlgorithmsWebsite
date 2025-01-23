@@ -9,11 +9,26 @@ export class Prims extends Algorithm {
     private readonly visited = this.createVisitedArray(); 
     
 
-    protected override executeStep() : void{ 
-        if (this.frontier.size() === 0){
-            return; 
+    //Checks if frontier is empty, which implies that the algorithm is complete.
+    protected override algorithmComplete(): boolean {
+        return this.frontier.length === 0; 
+    }
+
+
+    //Visits the first cell, adds its neighbours to frontier, and marks said cell as visited. 
+    protected override prepareAlgorithm() : void {
+        const [startX, startY] : [number, number] = this.getStartCordinates(); 
+        const firstEdges : Edge[] = this.getNeighbouringEdges(new Cell(startX, startY, CellType.PATH), this.visited); 
+        this.visited[startY][startX] = true; 
+
+        for (let edge of firstEdges){
+            this.frontier.add(edge);
         }
-       
+    }
+
+    
+    //Executes one step of algorithm
+    protected override executeStep() : void{ 
         const [currentCell, edgeCell, nextCell, weight] : Edge = this.frontier.pop()!; //Not null since we checked size above
         this.lastEdge = [currentCell, edgeCell, nextCell, weight];
 
@@ -30,7 +45,8 @@ export class Prims extends Algorithm {
         }
     }
 
-
+    
+    //Creates boolean array that holds values determening if cell is visited. 
     private createVisitedArray():boolean[][]{
         const visited : boolean [][] = []; 
         for (let yPos = 0; yPos < this.maze.height; yPos ++){
@@ -43,6 +59,7 @@ export class Prims extends Algorithm {
     }
 
 
+    //Gets all neighbours, horisontally and vertically, of cell. 
     private getNeighbouringEdges(currentCell : Cell, visited : boolean[][]) : Edge[]{
         const edges : Edge[] = []; 
         const yPos : number = currentCell.yPos; 
@@ -67,7 +84,8 @@ export class Prims extends Algorithm {
     }    
 
 
-    private getStartCordinates(): [number, number]{ //Makes sure startCordinates are on line 3 + 2x = y; 
+    //Returns a pair of coordinates (x,y), of even values. This is because start cell has to be a path. 
+    private getStartCordinates(): [number, number]{ 
         let startX : number = Math.floor(Math.random() * (this.maze.width-1));
         let startY : number = Math.floor(Math.random() * (this.maze.height-1));
 

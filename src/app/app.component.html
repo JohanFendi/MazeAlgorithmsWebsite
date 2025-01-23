@@ -9,24 +9,24 @@
         <div class = "sidebar">
             <div class = "sliderContainer">
                 <h3>Maze Height</h3>
-                <input #heightSlider type="range" min = 3 max = 53 step = 2 (input)="getMazeHeight(heightSlider)">
+                <input #heightSlider type="range" value = 11 min = 3 max = 53 step = 2 (input)="appStateObj.getMazeHeight(heightSlider, this.mazeCanvasRef)">
             </div>
             
             <div class = "sliderContainer">
                 <h3>Maze width</h3>
-                <input #widthSlider type="range" min = 3 max = 53 step = 2 (input)="getMazeWidth(widthSlider)">
+                <input #widthSlider type="range" value = 11 min = 3 max = 53 step = 2 (input)="appStateObj.getMazeWidth(widthSlider, this.mazeCanvasRef)">
             </div>
 
             <div class = "sliderContainer">
                 <h3>Algorithm Delay</h3>
-                <input #delaySlider type="range" min = 1 max = 300 (input)="getAlgorithmDelay(delaySlider)">
+                <input #delaySlider type="range" value = 11 min = 1 max = 300 (input)="appStateObj.getAlgorithmDelay(delaySlider)">
             </div>
 
             <div class = "buttonContainer">
-                <button class = "sidebarButton" (click) = "startAlgorithm()">START</button>
-                <button class = "sidebarButton" (click) = "resetMaze()">RESET</button>
+                <button class = "sidebarButton">START</button>
+                <button class = "sidebarButton">RESET</button>
                 <button class = "sidebarButton">TUTORIAL</button>
-                <button class = "sidebarButton" (click) = "togglePause()">{{this.pauseButtonText}}</button>
+                <button class = "sidebarButton">Pause</button>
             </div>
         </div>
     </div>

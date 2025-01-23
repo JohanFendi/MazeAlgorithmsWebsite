@@ -9,14 +9,8 @@ export class Kruskals extends Algorithm {
     private index : number = 0; 
   
 
-    protected override executeStep() : void {
-        if (this.index >= this.edges.length || this.running.value === false){
-            clearInterval(this.intervalId); 
-            this.running.value = false; 
-            this.paused.value = false; 
-            return
-        } 
-        
+    //Executes one step of algorithm
+    protected override executeStep() : void {    
         const [currentCell, edgeCell, nextCell, weight] : Edge = this.edges[this.index]; 
         
         if (this.disjointedSet.union(currentCell, nextCell)){
@@ -31,7 +25,15 @@ export class Kruskals extends Algorithm {
     }  
 
 
-    public createEdges () : void {
+    //Checks is the index on the edges list is out of bounds, 
+    //which would mean that the algorithm as traversed all the edges and is finished.
+    protected override algorithmComplete(): boolean {
+        return this.index >= this.edges.length; 
+    }
+
+
+    //Gets all the edges, and shuffles them. Does not visit any cell. 
+    protected override prepareAlgorithm(): void {
         for (let yPos = 0; yPos < this.maze.height; yPos += 2){
             for (let xPos = 0; xPos < this.maze.width; xPos += 2){
                 if (xPos + 2 < this.maze.width){
@@ -47,6 +49,10 @@ export class Kruskals extends Algorithm {
         }
         this.edges.sort((tup1, tup2) => tup1[3] - tup2[3]); //Sorting the edges based on weight, i.e.shuffling
     }
+
+
+
+
 }
 
 
