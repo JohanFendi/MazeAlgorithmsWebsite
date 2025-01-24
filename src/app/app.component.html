@@ -9,24 +9,24 @@
         <div class = "sidebar">
             <div class = "sliderContainer">
                 <h3>Maze Height</h3>
-                <input #heightSlider type="range" value = 11 min = 3 max = 53 step = 2 (input)="appStateObj.getMazeHeight(heightSlider, this.mazeCanvasRef)">
+                <input #heightSlider type="range" value = 11 min = 3 max = 53 step = 2 (input)="appStateObj.setMazeHeight(heightSlider, this.mazeCanvasRef)">
             </div>
             
             <div class = "sliderContainer">
                 <h3>Maze width</h3>
-                <input #widthSlider type="range" value = 11 min = 3 max = 53 step = 2 (input)="appStateObj.getMazeWidth(widthSlider, this.mazeCanvasRef)">
+                <input #widthSlider type="range" value = 11 min = 3 max = 53 step = 2 (input)="appStateObj.setMazeWidth(widthSlider, this.mazeCanvasRef)">
             </div>
 
             <div class = "sliderContainer">
                 <h3>Algorithm Delay</h3>
-                <input #delaySlider type="range" value = 11 min = 1 max = 300 (input)="appStateObj.getAlgorithmDelay(delaySlider)">
+                <input #delaySlider type="range" value = 11 min = 1 max = 300 (input)="appStateObj.setAlgorithmDelay(delaySlider)">
             </div>
 
             <div class = "buttonContainer">
-                <button class = "sidebarButton">START</button>
-                <button class = "sidebarButton">RESET</button>
-                <button class = "sidebarButton">TUTORIAL</button>
-                <button class = "sidebarButton">Pause</button>
+                <button class = "sidebarButton" (click)="this.appStateObj.startAlgorithm(this.mazeCanvasRef)">{{this.appStateObj.startButtonText}}</button>
+                <button class = "sidebarButton" (click)="this.appStateObj.reset(this.mazeCanvasRef)">RESET</button>
+                <button class = "sidebarButton" >TUTORIAL</button>
+                <button class = "sidebarButton" (click)="this.appStateObj.togglePause()">{{this.appStateObj.pauseButtonText}}</button>
             </div>
         </div>
     </div>

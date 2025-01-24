@@ -28,9 +28,9 @@ export class Canvas {
         }
 
         this.mazeCanvasElement = mazeCanvasRef.nativeElement; 
-        this.cellSide = this.mazeCanvasElement.clientHeight / Math.max(mazeHeight, mazeWidth); 
-        this.offsetY = Math.max((mazeWidth-mazeHeight)*this.cellSide / 2, 0); 
-        this.offsetX = Math.max((mazeHeight-mazeWidth)*this.cellSide / 2, 0);
+        this.cellSide = this.mazeCanvasElement.clientHeight / (Math.max(mazeHeight, mazeWidth) + 2); 
+        this.offsetY = Math.max((mazeWidth-mazeHeight)* (this.cellSide-1) / 2, 0); 
+        this.offsetX = Math.max((mazeHeight-mazeWidth)*(this.cellSide-1) / 2, 0);
         this.mazeCanvasElement.width = this.mazeCanvasElement.clientWidth; 
         this.mazeCanvasElement.height = this.mazeCanvasElement.clientHeight; 
         let context : CanvasRenderingContext2D | null = this.mazeCanvasElement.getContext('2d');
@@ -48,15 +48,24 @@ export class Canvas {
         if (edge === undefined || edge === null){
             throw new Error(Canvas.edgeError); 
         }
+
         const [currentCell, edgeCell, nextCell, weight] = edge;
-        const edgeCellCopy : Cell = new Cell(edgeCell.xPos, edgeCell.yPos, edgeCell.type);
+        const edgeCellType : CellType = edgeCell.type; 
 
         for (let cell of [currentCell, edgeCell, nextCell]){
-            cell.updateType(CellType.BEINGDECIDED);
+            
+            if (cell.xPos === edgeCell.xPos && cell.yPos === edgeCell.yPos){
+                cell.updateType(CellType.EDGECELLBEINGPROCESSED); 
+            } 
+
+            else {
+                cell.updateType(CellType.PATHCELLBEINGPROCESSED);
+            }
+
             this.animateCell(cell);
 
             if (cell.yPos === edgeCell.yPos && cell.xPos === edgeCell.xPos){
-                cell.updateType(edgeCellCopy.type);
+                cell.updateType(edgeCellType);
             }
             else {
                 cell.updateType(CellType.PATH);
@@ -66,8 +75,8 @@ export class Canvas {
 
 
     //Used after animate edge to clear the animation
-    clearEdgeAnimation(edge : Edge | undefined | null) : void {
-        if (edge === undefined || edge === null){
+    clearEdgeAnimation(edge : Edge | null) : void {
+        if (edge === null){
             throw new Error(Canvas.edgeError); 
         }
 
@@ -80,8 +89,8 @@ export class Canvas {
 
     //Used in animateEdge to animate a single cell
     private animateCell(edgeCell : Cell) : void {
-        const canvas_yPos : number = edgeCell.yPos * this.cellSide + this.offsetY; 
-        const canvas_xPos : number = edgeCell.xPos * this.cellSide + this.offsetX; 
+        const canvas_yPos : number = (edgeCell.yPos + 1) * this.cellSide + this.offsetY; 
+        const canvas_xPos : number = (edgeCell.xPos + 1)* this.cellSide + this.offsetX; 
         this.context.fillStyle = ColorMap.getColor(edgeCell.type); 
         this.context.fillRect(canvas_xPos, canvas_yPos, this.cellSide, this.cellSide); 
     }
@@ -90,16 +99,24 @@ export class Canvas {
     //Draws the whole maze, not used during the animation of the algorithm
     //Used when the maze size changes, or to reset the maze. 
     drawGraphicalMaze() : void {
-        for (let yPos = 0; yPos < this.mazeHeight; yPos++){
-            for (let xPos = 0; xPos < this.mazeWidth; xPos++){
+        for (let yPos = 0; yPos < this.mazeHeight + 2; yPos++){
+            for (let xPos = 0; xPos < this.mazeWidth + 2; xPos++){
+
                 const canvas_yPos : number = yPos * this.cellSide + this.offsetY; 
                 const canvas_xPos : number = xPos * this.cellSide + this.offsetX; 
-    
-                if (yPos % 2 == 0 && xPos % 2 == 0){
+
+                if (xPos === 0 || xPos === this.mazeWidth+1 || yPos === 0 || yPos === this.mazeHeight+1){
+                    this.context.fillStyle = ColorMap.getColor(CellType.WALL);
+                    this.context.fillRect(canvas_xPos, canvas_yPos, this.cellSide, this.cellSide); 
+                    continue; 
+                }   
+                
+                
+                if ((yPos - 1) % 2 == 0 && (xPos-1) % 2 == 0){
                     this.context.fillStyle = ColorMap.getColor(CellType.PATH);
-                    }
+                }
     
-                else if (yPos % 2 == 1 && xPos % 2 == 1) {
+                else if ((yPos-1) % 2 == 1 && (xPos-1) % 2 == 1) {
                     this.context.fillStyle = ColorMap.getColor(CellType.WALL); 
                 }
     

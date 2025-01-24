@@ -10,13 +10,13 @@ export class Prims extends Algorithm {
     
 
     //Checks if frontier is empty, which implies that the algorithm is complete.
-    protected override algorithmComplete(): boolean {
+    override isComplete(): boolean {
         return this.frontier.length === 0; 
     }
 
 
     //Visits the first cell, adds its neighbours to frontier, and marks said cell as visited. 
-    protected override prepareAlgorithm() : void {
+    override prepare() : void {
         const [startX, startY] : [number, number] = this.getStartCordinates(); 
         const firstEdges : Edge[] = this.getNeighbouringEdges(new Cell(startX, startY, CellType.PATH), this.visited); 
         this.visited[startY][startX] = true; 
@@ -28,9 +28,8 @@ export class Prims extends Algorithm {
 
     
     //Executes one step of algorithm
-    protected override executeStep() : void{ 
+    override executeStep() : Edge{ 
         const [currentCell, edgeCell, nextCell, weight] : Edge = this.frontier.pop()!; //Not null since we checked size above
-        this.lastEdge = [currentCell, edgeCell, nextCell, weight];
 
         if (this.visited[nextCell.yPos][nextCell.xPos]){
             edgeCell.updateType(CellType.WALL);
@@ -43,6 +42,7 @@ export class Prims extends Algorithm {
                 this.frontier.push(newEdge); 
             }
         }
+        return [currentCell, edgeCell, nextCell, weight]; 
     }
 
     

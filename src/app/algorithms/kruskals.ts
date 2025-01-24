@@ -9,8 +9,8 @@ export class Kruskals extends Algorithm {
     private index : number = 0; 
   
 
-    //Executes one step of algorithm
-    protected override executeStep() : void {    
+    //Returns the processed edge
+    override executeStep() : Edge{    
         const [currentCell, edgeCell, nextCell, weight] : Edge = this.edges[this.index]; 
         
         if (this.disjointedSet.union(currentCell, nextCell)){
@@ -22,18 +22,20 @@ export class Kruskals extends Algorithm {
         }
 
         this.index++; 
+
+        return [currentCell, edgeCell, nextCell, weight]; 
     }  
 
 
     //Checks is the index on the edges list is out of bounds, 
     //which would mean that the algorithm as traversed all the edges and is finished.
-    protected override algorithmComplete(): boolean {
+    override isComplete(): boolean {
         return this.index >= this.edges.length; 
     }
 
 
     //Gets all the edges, and shuffles them. Does not visit any cell. 
-    protected override prepareAlgorithm(): void {
+    override prepare(): void {
         for (let yPos = 0; yPos < this.maze.height; yPos += 2){
             for (let xPos = 0; xPos < this.maze.width; xPos += 2){
                 if (xPos + 2 < this.maze.width){

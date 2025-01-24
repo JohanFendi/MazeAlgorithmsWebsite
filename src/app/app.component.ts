@@ -28,8 +28,4 @@ export class AppComponent {
   ngAfterViewInit() : void{
     this.appStateObj.drawMaze(this.mazeCanvasRef); 
   }
-
-  
-  
-  
 }
