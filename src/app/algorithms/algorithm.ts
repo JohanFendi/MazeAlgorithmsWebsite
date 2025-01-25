@@ -1,4 +1,4 @@
-import { Canvas } from "../IOmodules/canvas";
+import { Canvas } from "../IOcomponents/canvas";
 import { Maze } from "../datastructures/maze";
 import { ElementRef } from "@angular/core";
 import { Cell, ColorMap, Edge , CellType} from "../datastructures/cell";

@@ -6,12 +6,12 @@ import { Edge } from "../datastructures/cell";
 import { Kruskals } from "../algorithms/kruskals";
 
 
-//Handles interaction between the canvas and the algorithm
+//Actually runs the algorithm by using a canvas and an algorithm object
 export class Animation{
 
     private static readonly LASTEDGEERROR : string = "LastEdgeError : lastEdge is undefined while algorithm is running. "
 
-    //Instance methods
+    //Instance variables
     private intervalId : NodeJS.Timeout | undefined = undefined;
     private algorithm : Algorithm; 
     private paused : boolean = false; 
@@ -32,12 +32,12 @@ export class Animation{
 
 
     //Takes delay value from appState and creates a new interval
-    createNewInterval(delay : number):void{
+    createNewInterval(newDelay : number):void{
         if (this.intervalId !== undefined){
             clearInterval(this.intervalId);
         }
    
-        this.intervalId = setInterval(() => this.step(), delay);
+        this.intervalId = setInterval(() => this.step(), newDelay);
     }
 
 

@@ -1,14 +1,16 @@
 
 .container {
     display: flex;   
-    justify-content: space-between;
-    width: 100%;
+    justify-content: center;
+    width: 90%;
+    margin: auto; 
+    height: 70vh;
+
 }
 
 
 .mazeContainer {
     width : 70%; 
-    height: 100vh;
     display: flex; 
     justify-content: center;
     align-items: center;
@@ -16,15 +18,13 @@
 
 
 .mazeCanvas {
-    width: 50%;
+    width: 60%;
     aspect-ratio: 1/1;
 }
 
 
 .sidebar {
-    background-color: rgb(21, 21, 21);
-    width: 30%;
-    height: 100vh; 
+    width: 40%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -39,16 +39,18 @@
     align-items: center;
     justify-content: center;
     padding : 10px; 
-    border: 3px solid rgb(57, 57, 57);
+    border: 3px solid rgb(41, 41, 41);
     background-color:rgb(5, 5, 5) ;
     border-radius: 2px;
     width: 40%;
     height: 12%;
+    box-shadow: 0 0 10px 10px rgb(15, 15, 15);
 }
 
 .slider {
     height: 5px;
     background: red;
+    width: 80%;
 }
 
 .sliderTitle {
@@ -74,7 +76,7 @@
     font-size: 0.8rem;
     font-weight: bold;
     border-radius: 5px;
-    box-shadow: 3px 3px 5px 5px rgb(0, 0, 0);
+    box-shadow: 0 0 10px 10px rgb(15, 15, 15);
 }
 
 .sidebarButton:hover , .slider:hover {

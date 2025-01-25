@@ -14,7 +14,6 @@ export class Canvas {
 
 
     //instance variables
-    private readonly mazeCanvasElement : HTMLCanvasElement; 
     private readonly offsetX : number;
     private readonly offsetY : number; 
     private readonly cellSide : number; 
@@ -27,13 +26,13 @@ export class Canvas {
             throw new Error(Canvas.mazeCanvasRefError); 
         }
 
-        this.mazeCanvasElement = mazeCanvasRef.nativeElement; 
-        this.cellSide = this.mazeCanvasElement.clientHeight / (Math.max(mazeHeight, mazeWidth) + 2); 
+        const mazeCanvasElement = mazeCanvasRef.nativeElement; 
+        this.cellSide = mazeCanvasElement.clientHeight / (Math.max(mazeHeight, mazeWidth) + 2); 
         this.offsetY = Math.max((mazeWidth-mazeHeight)* (this.cellSide-1) / 2, 0); 
         this.offsetX = Math.max((mazeHeight-mazeWidth)*(this.cellSide-1) / 2, 0);
-        this.mazeCanvasElement.width = this.mazeCanvasElement.clientWidth; 
-        this.mazeCanvasElement.height = this.mazeCanvasElement.clientHeight; 
-        let context : CanvasRenderingContext2D | null = this.mazeCanvasElement.getContext('2d');
+        mazeCanvasElement.width = mazeCanvasElement.clientWidth; 
+        mazeCanvasElement.height = mazeCanvasElement.clientHeight; 
+        const context : CanvasRenderingContext2D | null = mazeCanvasElement.getContext('2d');
 
         if (context == null){
             throw new Error(Canvas.contextNullError); 

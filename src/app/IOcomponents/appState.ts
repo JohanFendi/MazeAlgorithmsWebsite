@@ -94,6 +94,9 @@ export class appState {
 
 
     toggleRunning(mazeCanvasRef : ElementRef<HTMLCanvasElement>|undefined) : void {
+        if (mazeCanvasRef === undefined){
+            throw new Error(appState.MAZECANVASREFERROR); 
+        }
         if (this.running) {
             this.resetAlgorithm(mazeCanvasRef); 
         } 
@@ -105,7 +108,7 @@ export class appState {
 
     //Used in toggleRunning
     private startAlgorithm(mazeCanvasRef : ElementRef<HTMLCanvasElement>|undefined) {
-        if (mazeCanvasRef == undefined){
+        if (mazeCanvasRef === undefined){
             throw new Error(appState.MAZECANVASREFERROR); 
         }
         this.running = true; 
@@ -119,7 +122,7 @@ export class appState {
 
     //Used in toggleRunning
     private resetAlgorithm(mazeCanvasRef : ElementRef<HTMLCanvasElement>|undefined):void {
-        if (this.animationObj == undefined){
+        if (this.animationObj === undefined){
             throw new Error(appState.ANIMATIONOBJERROR); 
         }
 
@@ -152,9 +155,9 @@ export class appState {
     //---------------------------------------------------------------------------
 
 
-    //Only used when algorithm is not running, in getMazeWidth/Height (and reset?)
+    //Only used when algorithm is not running, in getMazeWidth/Height and resetAlgorithm
     drawMaze(mazeCanvasRef : ElementRef<HTMLCanvasElement> | undefined ):void{
-        if (mazeCanvasRef == undefined){
+        if (mazeCanvasRef === undefined){
             throw new Error(appState.MAZECANVASREFERROR); 
         }
       

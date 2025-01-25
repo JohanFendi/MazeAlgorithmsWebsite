@@ -1,0 +1,51 @@
+
+.container {
+    background-color: rgb(2, 2, 5);
+    height: 15vh;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10vh;
+}
+
+.navContainer {
+    margin-top: 15px;
+    width: 60%; 
+    border-radius: 5vh;
+    display: flex;
+    justify-content: center;
+    border: 3px solid rgb(41, 41, 41);
+    background-color:rgb(21, 21, 21) ;
+    box-shadow: 0 0 10px 10px rgb(15, 15, 15);
+}
+
+nav {
+    display: flex;
+    width: 70%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.headerButton  {
+    color: white; 
+    font-weight: bold;
+    width: 20%; 
+    aspect-ratio: 5/2;
+    font-size: 0.8rem;
+    border-radius: 5px;
+    box-shadow: 0 0 10px 10px rgb(15, 15, 15);
+    border : 3px solid rgb(57, 57, 57);
+    background-color: rgb(15, 15, 15) ;
+}
+
+.headerButton:hover {
+    cursor: pointer;
+    background-color: rgb(30, 30, 30);
+    transform : scale(1.02); 
+    transition: transform .2s ease; 
+}
+
+.sidebarButton:active {
+    background-color: rgb(46, 47, 46);
+    transform : scale(.97); 
+    transition: transform .2s ease; 
+}

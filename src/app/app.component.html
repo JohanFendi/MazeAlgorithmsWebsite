@@ -1,28 +1,23 @@
 <main>
+    <app-header></app-header>
     <div class = container>
-        <div class = "mazeContainer">
-            <canvas class = "mazeCanvas" #mazeCanvas>
-
-            </canvas>
-        </div>
-
         <div class = "sidebar">
             <div class = "sliderContainer">
                 <h3 class = "sliderTitle">Maze Height</h3>
                 <input #heightSlider class = "slider" type="range" value ={{this.INITIALMAZESIDE}} min = {{this.MINMAZESIDE}} 
-                max = {{this.MAXMAZESIDE}} step = 2 (input)="appStateObj.setMazeHeight(heightSlider, this.mazeCanvasRef)">
+                max = {{this.MAXMAZESIDE}} step = 2 (input)="this.appStateObj.setMazeHeight(heightSlider, this.mazeCanvasRef)">
             </div>
             
             <div class = "sliderContainer">
-                <h3 class = "sliderTitle">Maze width</h3>
+                <h3 class = "sliderTitle">Maze Width</h3>
                 <input #widthSlider class = "slider" type="range" value = {{this.INITIALMAZESIDE}} min = {{this.MINMAZESIDE}} 
-                max = {{this.MAXMAZESIDE}} step = 2 (input)="appStateObj.setMazeWidth(widthSlider, this.mazeCanvasRef)">
+                max = {{this.MAXMAZESIDE}} step = 2 (input)="this.appStateObj.setMazeWidth(widthSlider, this.mazeCanvasRef)">
             </div>
 
             <div class = "sliderContainer">
                 <h3 class = "sliderTitle">Speed</h3>
                 <input #speedSlider class = "slider" type="range" value = {{this.initialDelay}} min = 1 
-                max = {{this.maxDelay}} (input)="appStateObj.setAlgorithmDelay(speedSlider, this.maxDelay)">
+                max = {{this.maxDelay}} (input)="this.appStateObj.setAlgorithmDelay(speedSlider, this.maxDelay)">
             </div>
 
             <div class = "buttonContainer">
@@ -31,5 +26,9 @@
 
             </div>
         </div>
+        <div class = "mazeContainer">
+            <canvas class = "mazeCanvas" #mazeCanvas></canvas>
+        </div>
+
     </div>
 </main>
