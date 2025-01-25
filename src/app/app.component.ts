@@ -1,11 +1,8 @@
-import { Component, ElementRef, ViewChild, PLATFORM_ID, inject } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { NgFor, isPlatformBrowser } from '@angular/common';
+import { NgFor } from '@angular/common';
 
-import { Maze } from './datastructures/maze';
-import { Prims } from './algorithms/prims';
-import { Kruskals } from './algorithms/kruskals';
-import { Algorithm } from './algorithms/algorithm';
+
 import { appState } from './IOmodules/appState';
 
 
@@ -20,10 +17,20 @@ import { appState } from './IOmodules/appState';
 export class AppComponent {
   title = 'maze-generation-visualizer';
   
-  
-  @ViewChild('mazeCanvas') mazeCanvasRef: ElementRef<HTMLCanvasElement> | undefined;    
-  protected appStateObj : appState = new appState();
+  //Maze dimensions (y) have to be on line 3 + 2x = y.
+  readonly MINMAZESIDE : number = 3; 
+  readonly INITIALMAZESIDE : number = 25; 
+  readonly MAXMAZESIDE : number = 3 + this.INITIALMAZESIDE * 2; 
 
+  //Algorithm delay variables.
+  readonly initialDelay : number = 150; 
+  readonly maxDelay : number = this.initialDelay * 2; 
+  
+  //Used for animation of maze.
+  @ViewChild('mazeCanvas') mazeCanvasRef: ElementRef<HTMLCanvasElement> | undefined;   
+  
+  //Main IO object. 
+  protected appStateObj : appState = new appState(this.INITIALMAZESIDE, this.initialDelay); 
   
   ngAfterViewInit() : void{
     this.appStateObj.drawMaze(this.mazeCanvasRef); 

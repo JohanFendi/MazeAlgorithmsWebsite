@@ -45,8 +45,8 @@ export class ColorMap {
     //Insert cell types and their corresponding colors.
     static {
         ColorMap.table.set(CellType.PATH, [255,255,255]); 
-        ColorMap.table.set(CellType.UNDECIDED, [125,0,125]);
-        ColorMap.table.set(CellType.WALL, [0,0,0]);
+        ColorMap.table.set(CellType.UNDECIDED, [100,100,100]);
+        ColorMap.table.set(CellType.WALL, [30,30,30]);
         ColorMap.table.set(CellType.PATHCELLBEINGPROCESSED, [100,0,0]);
         ColorMap.table.set(CellType.EDGECELLBEINGPROCESSED, [0,100,0]);
     }

@@ -14,23 +14,29 @@ export class appState {
     private static readonly MAZECANVASREFERROR : string = "CanvasError: mazeCanvasRef is undefined"; 
     private static readonly ANIMATIONOBJERROR: string = "AnimationObjError : AnimationObj undefined while animation running."
     private static readonly PAUSEBUTTONTEXT : string = "PAUSE";
-    private static readonly RESUMEBUTTONTEXT : string = "REUSME"; 
+    private static readonly RESUMEBUTTONTEXT : string = "RESUME"; 
     private static readonly STARTBUTTONTEXT : string = "START"; 
-    private static readonly RUNNINGBUTTONTEXT : string = "RUNNING"; 
-    private static readonly INITIALMAZESIDE : number = 11; 
-    private static readonly INITIALDELAY : number = 100; 
+    private static readonly RESETBUTTONTEXT : string = "RESET"; 
 
 
     //Instance variables
     private animationObj : Animation | undefined;
-    private mazeHeight : number = appState.INITIALMAZESIDE; 
-    private mazeWidth : number = appState.INITIALMAZESIDE;  
-    private delay : number = appState.INITIALDELAY;  
+    private mazeHeight : number; 
+    private mazeWidth : number;  
+    private delay : number;  
     private running : boolean = false; 
     private paused : boolean = false; 
     private platfrom_id = inject(PLATFORM_ID); 
     private _pauseButtonText : string = appState.PAUSEBUTTONTEXT; 
     private _startButtonText : string = appState.STARTBUTTONTEXT; 
+
+    
+    //Takes inital maze side value from app component.
+    constructor(mazeSide : number, initialDelay : number){
+        this.mazeHeight = mazeSide; 
+        this.mazeWidth = mazeSide; 
+        this.delay = initialDelay; 
+    }
    
 
     //Methods get values from key html sliders and update the state of the app.
@@ -59,8 +65,9 @@ export class appState {
 
     
     //If algorithm is running, creates a new interval in the animationObj
-    setAlgorithmDelay(delaySlider : HTMLInputElement) : void {
-        this.delay = Number(delaySlider.value); 
+    //Calculates delay as maxDelay - algorithmSpeed
+    setAlgorithmDelay(speedSlider : HTMLInputElement, maxDelay : number) : void {
+        this.delay = maxDelay - Number(speedSlider.value); 
 
         if (this.running) {
             if (this.animationObj == undefined){
@@ -86,49 +93,58 @@ export class appState {
     }
 
 
-    startAlgorithm(mazeCanvasRef : ElementRef<HTMLCanvasElement>|undefined) : void {
-        if (!this.running) {
-            if (mazeCanvasRef == undefined){
-                throw new Error(appState.MAZECANVASREFERROR); 
-            }
-            this.running = true; 
-            this._startButtonText = appState.RUNNINGBUTTONTEXT;
-            const canvas : Canvas = new Canvas(this.mazeHeight, this.mazeWidth, mazeCanvasRef); 
-            const maze : Maze = new Maze (this.mazeWidth, this.mazeHeight); 
-            this.animationObj = new Animation(canvas, maze); 
-            this.animationObj.createNewInterval(this.delay);   
-        }
-    }
-
-
-    reset(mazeCanvasRef : ElementRef<HTMLCanvasElement> | undefined ) : void{
+    toggleRunning(mazeCanvasRef : ElementRef<HTMLCanvasElement>|undefined) : void {
         if (this.running) {
-            if (this.animationObj == undefined){
-                throw new Error(appState.ANIMATIONOBJERROR); 
-            }
-
-            //Reset buttontexts
-            this._startButtonText = appState.STARTBUTTONTEXT;
-            this._pauseButtonText = appState.PAUSEBUTTONTEXT;
-
-            //Reset state
-            this.running = false; 
-            this.paused = false; 
-            
-            //Clear interval and dereference animationObj variable
-            this.animationObj.stopAlgorithm(); 
-            this.animationObj = undefined; 
-            
-            this.drawMaze(mazeCanvasRef); 
+            this.resetAlgorithm(mazeCanvasRef); 
+        } 
+        else {
+            this.startAlgorithm(mazeCanvasRef); 
         }
     }
+
+
+    //Used in toggleRunning
+    private startAlgorithm(mazeCanvasRef : ElementRef<HTMLCanvasElement>|undefined) {
+        if (mazeCanvasRef == undefined){
+            throw new Error(appState.MAZECANVASREFERROR); 
+        }
+        this.running = true; 
+        this._startButtonText = appState.RESETBUTTONTEXT;
+        const canvas : Canvas = new Canvas(this.mazeHeight, this.mazeWidth, mazeCanvasRef); 
+        const maze : Maze = new Maze (this.mazeWidth, this.mazeHeight); 
+        this.animationObj = new Animation(canvas, maze); 
+        this.animationObj.createNewInterval(this.delay);   
+    }
+
+
+    //Used in toggleRunning
+    private resetAlgorithm(mazeCanvasRef : ElementRef<HTMLCanvasElement>|undefined):void {
+        if (this.animationObj == undefined){
+            throw new Error(appState.ANIMATIONOBJERROR); 
+        }
+
+        //Reset buttontexts
+        this._startButtonText = appState.STARTBUTTONTEXT;
+        this._pauseButtonText = appState.PAUSEBUTTONTEXT;
+
+        //Reset state
+        this.running = false; 
+        this.paused = false; 
+        
+        //Clear interval and dereference animationObj variable
+        this.animationObj.stopAlgorithm(); 
+        this.animationObj = undefined; 
+        
+        this.drawMaze(mazeCanvasRef);  
+    }
+
 
     //Used in html
     get pauseButtonText(){
         return this._pauseButtonText; 
     }
 
-
+    //Used in html
     get startButtonText(){
         return this._startButtonText; 
     }
