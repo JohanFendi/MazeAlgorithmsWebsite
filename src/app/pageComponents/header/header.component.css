@@ -23,29 +23,58 @@ nav {
     width: 70%;
     justify-content: space-between;
     align-items: center;
+    position: relative;
 }
 
+/*Buttons inherit styles from customButton in styles.css */
+
 .headerButton  {
-    color: white; 
-    font-weight: bold;
-    width: 20%; 
-    aspect-ratio: 5/2;
-    font-size: 0.8rem;
-    border-radius: 5px;
     box-shadow: 0 0 10px 10px rgb(15, 15, 15);
-    border : 3px solid rgb(57, 57, 57);
     background-color: rgb(15, 15, 15) ;
 }
 
 .headerButton:hover {
-    cursor: pointer;
     background-color: rgb(30, 30, 30);
-    transform : scale(1.02); 
-    transition: transform .2s ease; 
 }
 
-.sidebarButton:active {
+.headerButton:active {
     background-color: rgb(46, 47, 46);
-    transform : scale(.97); 
-    transition: transform .2s ease; 
 }
+
+
+/*-----------------------------------------------------------*/
+
+.dropDownContainer {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    align-items: center;
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 4.5vw; 
+}
+
+.menuButton {
+    color: white; 
+    border: none;
+    width : 10vw; 
+    height: 50px;
+    background-color: rgb(15, 15, 15) ;
+}
+
+.menuButton:hover {
+    color: black;
+    background-color: gray;
+}
+
+
+
+
+
+
+
+

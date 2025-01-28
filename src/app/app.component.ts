@@ -23,11 +23,12 @@ export class AppComponent {
   readonly MAXMAZESIDE : number = 3 + this.INITIALMAZESIDE * 2; 
 
   //Algorithm delay variables.
-  readonly initialDelay : number = 150; 
+  readonly initialDelay : number = 500; 
   readonly maxDelay : number = this.initialDelay * 2; 
   
   //Used for animation of maze.
   @ViewChild('mazeCanvas') mazeCanvasRef: ElementRef<HTMLCanvasElement> | undefined;   
+  @ViewChild(HeaderComponent) headerComponentRef : ElementRef | undefined; 
   
   //Main IO object. 
   protected appStateObj : appState = new appState(this.INITIALMAZESIDE, this.initialDelay); 

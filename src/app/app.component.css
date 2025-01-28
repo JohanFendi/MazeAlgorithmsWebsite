@@ -8,7 +8,6 @@
 
 }
 
-
 .mazeContainer {
     width : 70%; 
     display: flex; 
@@ -32,6 +31,7 @@
     gap: 3rem; 
 }
 
+/*-------------------------------------------*/
 
 .sliderContainer{
     display: flex;
@@ -58,6 +58,9 @@
 }
 
 
+/*-------------------------------------------*/
+
+
 .buttonContainer {
     width : 80%;
     display: flex;
@@ -68,25 +71,12 @@
 
 
 .sidebarButton {
-    color: white; 
-    width: 30%;
-    height: 50px;
-    aspect-ratio: 3/1;
-    border : 3px solid rgb(57, 57, 57);
-    font-size: 0.8rem;
-    font-weight: bold;
-    border-radius: 5px;
+    width: 9vw;
     box-shadow: 0 0 10px 10px rgb(15, 15, 15);
 }
 
-.sidebarButton:hover , .slider:hover {
+.slider:hover {
     cursor: pointer;
-}
-
-.sidebarButton:active {
-    background-color: rgb(134, 234, 146);
-    transform : scale(.97); 
-    transition: transform .2s ease; 
 }
 
 #startButton {
@@ -105,3 +95,10 @@
     background-color: rgb(116, 3, 3);
 }
 
+#startButton:active {
+    background-color: rgb(133, 226, 133);
+}
+
+#pauseButton:active {
+    background-color: rgb(185, 110, 110);
+}

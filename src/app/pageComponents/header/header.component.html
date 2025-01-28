@@ -1,9 +1,17 @@
 <header class = "container">
     <div class = "navContainer">
         <nav>
-            <button class = "dropDown headerButton">Algorithms</button>
+            <button class = "customButton headerButton">Tutorial</button>
             <h1 class = "websiteTitle">{{this.websiteTitle}}</h1>
-            <button class = "tutorialButton headerButton">Tutorial</button>
+           
+            <div class = "dropDownContainer">
+                <button class = "customButton headerButton dropDownButton" (click) = "toggleShowMenu()">Algorithms</button>
+                <div *ngIf = this.showMenu class = "menu">
+                    <button id = kruskalsButton class = " menuButton" (click) = "algorithm = Kruskals">Kruskals</button>
+                    <button id = primsButton class = " menuButton" (click) = "algorithm = Prims">Prims</button>
+                    <button id = dfsButton class = " menuButton">Depth First Search</button>
+                </div>
+            </div>
         </nav>
     </div>
 </header>
