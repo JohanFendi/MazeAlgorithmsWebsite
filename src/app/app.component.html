@@ -1,5 +1,5 @@
 <main>
-    <app-header></app-header>
+    <app-header (algorithmChoosen)="this.appStateObj.algorithm = $event"></app-header>
     <div class = container>
         <div class = "sidebar">
             <div class = "sliderContainer">
@@ -23,8 +23,8 @@
             <div class = "buttonContainer">
                 <button id = "startButton" class = "customButton sidebarButton" (click)="this.appStateObj.toggleRunning(this.mazeCanvasRef)">{{this.appStateObj.startButtonText}}</button>
                 <button id = "pauseButton" class = "customButton sidebarButton" (click)="this.appStateObj.togglePause()">{{this.appStateObj.pauseButtonText}}</button>
-
             </div>
+
         </div>
         <div class = "mazeContainer">
             <canvas class = "mazeCanvas" #mazeCanvas></canvas>

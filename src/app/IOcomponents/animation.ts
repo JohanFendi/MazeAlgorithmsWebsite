@@ -10,6 +10,8 @@ import { Kruskals } from "../algorithms/kruskals";
 export class Animation{
 
     private static readonly LASTEDGEERROR : string = "LastEdgeError : lastEdge is undefined while algorithm is running. "
+    private static readonly ALGOUNDEFINEDERROR : string = `AlgorrithmUndefinedError : algorithm which is 
+                                                        passed into constructor of animation is undefined.`
 
     //Instance variables
     private intervalId : NodeJS.Timeout | undefined = undefined;
@@ -19,8 +21,12 @@ export class Animation{
     private lastEdge : Edge | undefined; 
 
 
-    constructor(private readonly canvas : Canvas, maze : Maze){
-        this.algorithm = new Kruskals(maze); 
+    constructor(private readonly canvas : Canvas, maze : Maze, algorithm : new (maze : Maze) => Algorithm){
+        if (algorithm === undefined){
+            throw new Error(Animation.ALGOUNDEFINEDERROR); 
+        }
+        console.log(algorithm); 
+        this.algorithm = new algorithm(maze); 
         this.canvas.drawGraphicalMaze();
     } 
 

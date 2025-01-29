@@ -1,7 +1,6 @@
 import { isPlatformBrowser } from "@angular/common";
 import { ElementRef, inject, PLATFORM_ID } from "@angular/core";
-import assert from "assert";
-
+import { Algorithm } from "../algorithms/algorithm";
 import { Animation } from "./animation";
 import { Maze } from "../datastructures/maze";
 import { Canvas } from "./canvas";
@@ -10,7 +9,6 @@ import { Canvas } from "./canvas";
 //Handles IO. Manipulates the animation object bassed on the IO values
 export class appState {
 
-    //Final non-instance variables
     private static readonly MAZECANVASREFERROR : string = "CanvasError: mazeCanvasRef is undefined"; 
     private static readonly ANIMATIONOBJERROR: string = "AnimationObjError : AnimationObj undefined while animation running."
     private static readonly PAUSEBUTTONTEXT : string = "PAUSE";
@@ -29,13 +27,15 @@ export class appState {
     private platfrom_id = inject(PLATFORM_ID); 
     private _pauseButtonText : string = appState.PAUSEBUTTONTEXT; 
     private _startButtonText : string = appState.STARTBUTTONTEXT; 
+    private _algorithm : new (maze : Maze) => Algorithm; 
 
     
     //Takes inital maze side value from app component.
-    constructor(mazeSide : number, initialDelay : number){
+    constructor(mazeSide : number, initialDelay : number, algorithm : new (maze : Maze) => Algorithm){
         this.mazeHeight = mazeSide; 
         this.mazeWidth = mazeSide; 
         this.delay = initialDelay; 
+        this._algorithm = algorithm; 
     }
    
 
@@ -101,6 +101,7 @@ export class appState {
             this.resetAlgorithm(mazeCanvasRef); 
         } 
         else {
+      
             this.startAlgorithm(mazeCanvasRef); 
         }
     }
@@ -115,7 +116,7 @@ export class appState {
         this._startButtonText = appState.RESETBUTTONTEXT;
         const canvas : Canvas = new Canvas(this.mazeHeight, this.mazeWidth, mazeCanvasRef); 
         const maze : Maze = new Maze (this.mazeWidth, this.mazeHeight); 
-        this.animationObj = new Animation(canvas, maze); 
+        this.animationObj = new Animation(canvas, maze, this._algorithm); 
         this.animationObj.createNewInterval(this.delay);   
     }
 
@@ -151,6 +152,12 @@ export class appState {
     get startButtonText(){
         return this._startButtonText; 
     }
+
+    //Used in the selector of the header in the app component css. 
+    set algorithm(algo : new (maze : Maze) => Algorithm){
+        this._algorithm = algo; 
+    }
+
 
     //---------------------------------------------------------------------------
 

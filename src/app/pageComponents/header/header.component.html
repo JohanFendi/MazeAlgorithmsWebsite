@@ -5,10 +5,10 @@
             <h1 class = "websiteTitle">{{this.websiteTitle}}</h1>
            
             <div class = "dropDownContainer">
-                <button class = "customButton headerButton dropDownButton" (click) = "toggleShowMenu()">Algorithms</button>
+                <button class = "customButton headerButton dropDownButton" (click)="toggleShowMenu()">Algorithms</button>
                 <div *ngIf = this.showMenu class = "menu">
-                    <button id = kruskalsButton class = " menuButton" (click) = "algorithm = Kruskals">Kruskals</button>
-                    <button id = primsButton class = " menuButton" (click) = "algorithm = Prims">Prims</button>
+                    <button id = kruskalsButton class = " menuButton" (click)="algorithm = Kruskals">Kruskals</button>
+                    <button id = primsButton class = " menuButton" (click)="algorithm = Prims">Prims</button>
                     <button id = dfsButton class = " menuButton">Depth First Search</button>
                 </div>
             </div>
